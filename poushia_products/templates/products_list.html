@@ -1,0 +1,62 @@
+{% extends 'base/base.html' %}
+{% block contents %}
+{% load render_partial %}
+
+<div class="container">
+  <div class="row">
+
+    <!--Middle Part Start-->
+    <div id="content" class="col-sm-9">
+      <h1 class="title">لیست محصولات</h1>
+      <br>
+
+      <div class="row products-category">
+        {% for product in page_obj %}
+          {% if product.image and product.title and product.get_product_detail_url %}
+            {% include 'product_item_component.html' with product=product %}
+          {% endif %}
+
+
+        {% empty %}
+          <p class="text-center">محصولی برای نمایش وجود ندارد 💫</p>
+        {% endfor %}
+      </div>
+
+        <!-- Pagination -->
+      <div class="row">
+        <div class="col-sm-12 text-center mt-4">
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              {% if page_obj.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">⬅️ قبلی</a>
+                </li>
+              {% endif %}
+
+              {% for page in paginator.page_range %}
+                <li class="page-item {% if page == page_obj.number %}active{% endif %}">
+                  <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                </li>
+              {% endfor %}
+
+              {% if page_obj.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">بعدی ➡️</a>
+                </li>
+              {% endif %}
+            </ul>
+            <p class="mt-2 text-muted">صفحه {{ page_obj.number }} از {{ paginator.num_pages }}</p>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <!--Middle Part End -->
+
+    <aside id="column-right" class="col-sm-3 hidden-xs">
+      {% render_partial 'products_categories_partial' %}
+    </aside>
+
+  </div>
+</div>
+
+{% endblock %}

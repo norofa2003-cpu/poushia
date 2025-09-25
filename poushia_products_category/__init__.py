@@ -1,0 +1,1 @@
+default_app_config = 'poushia_products_category.apps.PoushiaProductsCategoryConfig'

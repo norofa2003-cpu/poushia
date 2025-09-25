@@ -1,0 +1,171 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block contents %}
+<div id="container">
+    <!-- Feature Box Start -->
+    <div class="container">
+        <div class="custom-feature-box row">
+            <div class="col-md-6 col-sm-9 col-xs-15">
+                <div class="feature-box fbox_1">
+                    <div class="title">ارسال رایگان</div>
+                    <p>برای خرید های بیش از یک میلیون تومان</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-9 col-xs-15">
+                <div class="feature-box fbox_2">
+                    <div class="title">پس فرستادن رایگان</div>
+                    <p>بازگشت کالا تا 24 ساعت پس از خرید</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Feature Box End -->
+
+    <div class="container">
+        <div class="row">
+            <!-- Left Part Start -->
+            <aside id="column-left" class="col-sm-3 hidden-xs">
+                <h3 class="subtitle">جدیدترین</h3>
+                <div class="side-item">
+                    {% for product in latest_products %}
+                    <div class="product-thumb row" style="margin-bottom: 12px;">
+                        <div class="col-xs-4">
+                            <a href="{{ product.get_product_detail_url }}">
+                                <img src="{{ product.image.url }}" alt="{{ product.title }}" title="{{ product.title }}"
+                                     class="img-responsive img-thumbnail"
+                                     style="max-width: 120%; max-height: 120px; object-fit: cover;">
+                            </a>
+                        </div>
+                        <div class="col-xs-8">
+                            <h4 style="margin-top: 10px;"><a href="{{ product.get_product_detail_url }}">{{ product.title }}</a></h4>
+                            <p class="price">{{ product.price }}</p>
+                            <div class="rating">
+                                {% for i in "12345" %}
+                                <span class="fa fa-stack">
+                  <i class="fa fa-star fa-stack-2x"></i>
+                  <i class="fa fa-star-o fa-stack-2x"></i>
+                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </aside>
+            <!-- Left Part End -->
+
+            <!-- Middle Part Start -->
+            <div id="content" class="col-sm-9">
+                <!-- Slideshow Start -->
+                <div class="slideshow single-slider owl-carousel">
+                    {% for slider in sliders %}
+                    <div class="item {{ forloop.first|yesno:" active,
+                    " }}">
+                    <a href="{{ slider.link }}">
+                        <img class="img-responsive" src="{{ slider.image.url }}" alt="{{ slider.title }}"/>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Slideshow End -->
+
+            <!-- Featured Products Start -->
+            <h3 class="subtitle">ویژه</h3>
+            <div class="owl-carousel product_carousel">
+                {% for product in featured_products %}
+                <div class="product-thumb clearfix">
+                    <div class="image">
+                        <a href="{{ product.get_product_detail_url }}">
+                            <img src="{{ product.image.url }}" alt="{{ product.title }}" title="{{ product.title }}"
+                                 class="img-responsive"/>
+                        </a>
+                    </div>
+                    <div class="caption text-center">
+                        <h4><a href="{{ product.get_product_detail_url }}">{{ product.title }}</a></h4>
+                        <span class="price">{{ product.price }}</span>
+                    </div>
+                    <div class="button-group text-center d-flex justify-content-center gap-2" style="margin-top: 8px;">
+                        {% if request.user.is_authenticated %}
+                        <form method="post" action="{% url 'poushia_order:add_new_order' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <input type="hidden" name="count" value="1">
+                            <button type="submit" class="btn btn-outline-success btn-sm" title="افزودن به سبد خرید">🛒
+                            </button>
+                        </form>
+
+                        <form method="post" action="{% url 'wishlist:add' product.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm" title="افزودن به علاقه‌مندی">
+                                ❤️
+                            </button>
+                        </form>
+
+                        <form method="post" action="{% url 'styleboard:add' product.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-warning btn-sm" title="افزودن به استایل‌ساز">
+                                ✨
+                            </button>
+                        </form>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-warning btn-sm">برای افزودن، وارد شوید</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Featured Products End -->
+
+            <!-- Most Visited Products Start -->
+            <h3 class="subtitle">پربازدید</h3>
+            <div class="owl-carousel product_carousel">
+                {% for product in most_visits_products %}
+                <div class="product-thumb clearfix">
+                    <div class="image">
+                        <a href="{{ product.get_product_detail_url }}">
+                            <img src="{{ product.image.url }}" alt="{{ product.title }}" title="{{ product.title }}"
+                                 class="img-responsive"/>
+                        </a>
+                    </div>
+                    <div class="caption text-center">
+                        <h4><a href="{{ product.get_product_detail_url }}">{{ product.title }}</a></h4>
+                        <span class="price">{{ product.price }}</span>
+                    </div>
+                    <div class="button-group text-center d-flex justify-content-center gap-2" style="margin-top: 8px;">
+                        {% if request.user.is_authenticated %}
+                        <form method="post" action="{% url 'poushia_order:add_new_order' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <input type="hidden" name="count" value="1">
+                            <button type="submit" class="btn btn-outline-success btn-sm" title="افزودن به سبد خرید">🛒
+                            </button>
+                        </form>
+
+                        <form method="post" action="{% url 'wishlist:add' product.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm" title="افزودن به علاقه‌مندی">
+                                ❤️
+                            </button>
+                        </form>
+
+                        <form method="post" action="{% url 'styleboard:add' product.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-warning btn-sm" title="افزودن به استایل‌ساز">
+                                ✨
+                            </button>
+                        </form>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-warning btn-sm">برای افزودن، وارد شوید</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Most Visited Products End -->
+        </div>
+        <!-- Middle Part End -->
+    </div>
+</div>
+</div>
+{% endblock %}

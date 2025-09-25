@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block contents %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">لیست علاقه‌مندی‌های شما 💖</h2>
+
+  {% if items %}
+    <div class="row justify-content-center">
+      {% for item in items %}
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+          <div class="card h-100 shadow-sm text-center p-2">
+            {% if item.product.image %}
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}"
+                   style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; display: block; margin: 0 auto;">
+            {% else %}
+              <img src="{% static 'images/no-image.png' %}" alt="بدون تصویر"
+                   style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; display: block; margin: 0 auto;">
+            {% endif %}
+            <div class="card-body p-2">
+              <h6 class="card-title">{{ item.product.title }}</h6>
+              <p class="card-text">{{ item.product.price }} تومان</p>
+
+              <a href="{% url 'poushia_products:product_detail' item.product.id item.product.title %}" class="btn btn-outline-primary btn-sm mb-2">مشاهده محصول</a>
+
+              <form method="post" action="{% url 'wishlist:remove' item.product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm">❌ حذف</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center mt-4">
+      هنوز محصولی در لیست علاقه‌مندی‌های شما نیست 💫
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load render_partial %}
+
+{% block contents %}
+    <div class="container">
+
+    <div class="row">
+        <aside id="column-right" class="col-sm-3 hidden-xs">
+                  {% render_partial 'poushia_profile.views.profile_sidebar' %}
+
+               </aside>
+
+        <!--Middle Part Start-->
+        <div id="content" class="col-sm-9">
+            <h1 class="title">پنل کاربری </h1>
+            <h2>سلام {{ request.user.first_name }} عزیز 🌸</h2>
+<p>به پنل کاربری خود خوش آمدید. از اینجا می‌تونید سفارش‌هات رو ببینی، تنظیمات حساب رو تغییر بدی و از تخفیف‌ها باخبر بشی.</p>
+
+            <div class="alert alert-info" style="margin-top: 30px;">
+  🎉 تخفیف ویژه برای کاربران فعال: ارسال رایگان برای سفارش‌های بالای یک میلیون تومان!🎉
+</div>
+
+        </div>
+        <!--Middle Part End -->
+
+    </div>
+</div>
+{% endblock %}

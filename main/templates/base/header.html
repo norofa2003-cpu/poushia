@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+{% load static %}
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="{% static 'image/favicon.png' %}" rel="icon"/>
+    <meta name="description" content="Responsive and clean html template design for any kind of ecommerce webshop">
+    <!-- CSS Part Start-->
+    <link rel="stylesheet" type="text/css" href="{% static 'js/bootstrap/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'js/bootstrap/css/bootstrap-rtl.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome/css/font-awesome.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stylesheet.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/owl.carousel.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/owl.transitions.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/responsive.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/stylesheet-rtl.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/responsive-rtl.css' %}"/>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans' type='text/css'>
+    <!-- CSS Part End-->
+</head>
+<body>
+<div class="wrapper-wide">
+    <div id="header">
+        <!-- Top Bar Start-->
+        <nav id="top" class="htop">
+            <div class="container">
+                <div class="row"><span class="drop-icon visible-sm visible-xs"><i
+                        class="fa fa-align-justify"></i></span>
+                    <div class="pull-left flip left-top">
+                        <div class="links">
+                            <ul>
+                                <li class="mobile"><i class="fa fa-phone"></i> {{ settings.phone }}</li>
+                                <li class="email"><a href="mailto:info@marketshop.com"><i class="fa fa-envelope"></i>{{settings.email}}</a>
+                                </li>
+
+                                <li><a href="{% url 'wishlist:list' %}">❤️</a></li>
+                                <li><a href="/cart">سبد خرید🛒</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="top-links" class="nav pull-right flip">
+                        <ul>
+                            {% if request.user.is_authenticated %}
+                            <li><a href="{% url 'logout' %}">خروج</a></li>
+                             <li><a href="/profile">حساب کاربری</a></li>
+                            {% else %}
+                            <li><a href="{% url 'login' %}">ورود</a></li>
+                            <li><a href="{% url 'register' %}">ثبت نام</a></li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Top Bar End-->
+        <!-- Header Start-->
+        <header class="header-row">
+            <div class="container">
+                <div class="table-container">
+                    <!-- Logo Start -->
+                    <div class="col-table-cell col-lg-6 col-md-6 col-sm-12 col-xs-12 inner">
+                        <div id="logo">
+                            <a href="{% static 'index.html' %}">
+                                <img class="img-responsive" src="{{settings.logo}}" title="poushia"
+                                     alt="poushia"/>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Logo End -->
+
+                    <!-- جستجو Start-->
+                    <div class="col-table-cell col-lg-3 col-md-3 col-sm-6 col-xs-12 inner">
+                        <div id="search" class="input-group">
+                            <form action="/products/search" method="get>">
+                                <input id="filter_name" name="q" type="text" value="{{ request.GET.q }}"
+                                       placeholder="جستجو" class="form-control input-lg"/>
+
+                                <button type="button" class="button-search"><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- جستجو End-->
+                </div>
+            </div>
+
+        </header>
+        <!-- Header End-->
+
+        <!-- Main u Start-->
+        <div class="container">
+            <nav id="menu" class="navbar">
+                <div class="navbar-header"><span class="visible-xs visible-sm"> منو <b></b></span></div>
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a class="home_link" title="خانه" href="{% url 'home' %}"><span>خانه</span></a></li>
+                        <li><a class="" href="{% url 'products:products_list' %}"><span>فروشگاه</span></a></li>
+
+                        <li class="custom-link"><a href="{% url 'styleboard:view' %}">استایل ساز</a></li>
+                        <li class="dropdown information-link"><a>برگه ها</a>
+                            <div class="dropdown-menu">
+                                <ul>
+                                    <li><a href="{% url 'login' %}">ورود</a></li>
+                                    <li><a href="{% url 'register' %}">ثبت نام</a></li>
+                                    <li><a href="{% url 'products:products_list' %}">محصولات</a></li>
+                                    <li><a href="/cart">سبد خرید</a></li>
+
+                                </ul>
+                                <ul>
+
+                                    <li><a href="{% url 'contact' %}">تماس با ما</a></li>
+                                    <li><a href="{% url 'wishlist:list' %}">علاقه مندی ها </a></li>
+                                    <li><a href="/products/search">جستجو</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="contact-link"><a href="{% url 'contact' %}">تماس با ما</a></li>
+                        <li class="custom-link-right"><a href="/products" target="_blank"> همین حالا بخرید!</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!-- Main u End-->
+
+    </div>
+</div>

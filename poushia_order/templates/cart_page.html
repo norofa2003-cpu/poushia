@@ -1,0 +1,139 @@
+{% extends 'base/base.html' %}
+
+{% block contents %}
+<div id="container">
+  <div class="container">
+    <!-- Breadcrumb Start -->
+    <ul class="breadcrumb">
+      <li><a href="{% url 'home' %}"><i class="fa fa-home"></i></a></li>
+      <li><a href="#">سبد خرید</a></li>
+    </ul>
+    <!-- Breadcrumb End -->
+
+    <div class="row">
+      <div id="content" class="col-sm-12">
+        <h1 class="title">سبد خرید</h1>
+
+        <div class="table-responsive">
+          {% if order and details|length > 0 %}
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <td class="text-center">تصویر</td>
+                <td class="text-left">نام محصول</td>
+                <td class="text-left">کد محصول</td>
+                <td class="text-left">رنگ انتخابی</td>
+                <td class="text-left">سایز انتخابی</td>
+                <td class="text-left">تعداد</td>
+                <td class="text-right">قیمت واحد</td>
+                <td class="text-right">کل</td>
+                <td class="text-right">عملیات</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for detail in details %}
+              <tr>
+                <td class="text-center">
+                  <a href="{{ detail.product.getproductdetail_url }}">
+                    <img src="{{ detail.product.image.url }}" alt="{{ detail.product.title }}" style="width:100px;height:100px;" class="img-thumbnail">
+                  </a>
+                </td>
+                <td class="text-left">
+                  <a href="{{ detail.product.getproductdetail_url }}">{{ detail.product.title }}</a><br>
+                  <small>{{ detail.product.title }}</small>
+                </td>
+                <td class="text-left">{{ detail.product.id }}</td>
+                <td class="text-left">
+                  {% if detail.selected_color %}
+                    {{ detail.selected_color }}
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+                <td class="text-left">
+                  {% if detail.selected_size %}
+                    {{ detail.selected_size }}
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+                <td class="text-left">
+                  <span>{{ detail.count }}</span>
+                </td>
+                <td class="text-right">{{ detail.price }}</td>
+                <td class="text-right">{{ detail.product_sum_in_cart }}</td>
+                <td class="text-right">
+                  <a href="/remove-cart-item/{{ detail.id }}" class="btn btn-danger">حذف از سبد</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+            <p>هیچ محصولی در سبد خرید شما وجود ندارد!</p>
+          {% endif %}
+        </div>
+
+        <h2 class="subtitle mt-4">حالا مایلید چه کاری انجام دهید؟</h2>
+        <p>در صورتی که کد تخفیف در اختیار دارید، میتوانید از آن در اینجا استفاده کنید.</p>
+
+        <!-- فرم کد تخفیف -->
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">استفاده از کوپن تخفیف</h4>
+              </div>
+              <div class="panel-body">
+                <form method="post" action="{% url 'apply_discount' %}">
+                  {% csrf_token %}
+                  <label for="discount_code">کد تخفیف خود را وارد کنید:</label>
+                  <div class="input-group">
+                    <input type="text" name="discount_code" placeholder="مثلاً AUTUMN20" class="form-control" id="discount_code">
+                    <span class="input-group-btn">
+                      <button type="submit" class="btn btn-success">اعمال کد تخفیف</button>
+                    </span>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+          <!-- قیمت نهایی -->
+        <div class="row mt-4">
+          <div class="col-sm-4 col-sm-offset-8">
+            <table class="table table-bordered">
+              <tbody>
+                <tr>
+                  <td class="text-right"><strong>جمع کل:</strong></td>
+                  <td class="text-right">{{ original_price }}</td>
+                </tr>
+                {% if discount_percent %}
+                <tr>
+                  <td class="text-right"><strong>تخفیف:</strong></td>
+                  <td class="text-right text-success">{{ discount_percent }}٪</td>
+                </tr>
+                {% endif %}
+                <tr>
+                  <td class="text-right"><strong>قابل پرداخت:</strong></td>
+                  <td class="text-right">{{ total_price }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- دکمه‌ها -->
+        <div class="buttons">
+          <div class="pull-left">
+            <a href="{% url 'products:products_list' %}" class="btn btn-default">ادامه خرید</a>
+          </div>
+          <div class="pull-right">
+            <a href="/request" class="btn btn-primary">تسویه حساب</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

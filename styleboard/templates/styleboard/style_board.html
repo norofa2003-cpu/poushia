@@ -1,0 +1,94 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block contents %}
+<div class="container mt-4">
+  <h2 class="subtitle text-center">استایل‌ساز پوشیا</h2>
+  <p class="text-center">لباس‌هایی که انتخاب کردی رو بکش و بچرخون 💃</p>
+
+  <div id="style-board" style="min-height:300px; border:1px dashed #ccc; padding:20px; display:flex; flex-direction:column; gap:12px;">
+    {% for product in board.products.all %}
+      <div class="style-item text-center" draggable="true" data-id="{{ product.id }}">
+        <img src="{{ product.image.url }}" class="img-fluid rotatable mb-1" style="max-width:150px;"
+             data-gallery='[
+               {% for img in product.gallery_images.all %}
+                 "{{ img.image.url }}"{% if not forloop.last %},{% endif %}
+               {% endfor %}
+             ]'>
+        <p class="mb-1" style="font-size:14px;">{{ product.title }}</p>
+        <form method="post" action="{% url 'styleboard:remove' product.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-sm">حذف</button>
+        </form>
+      </div>
+    {% empty %}
+      <p class="text-center">هنوز لباسی انتخاب نکردی 💫</p>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+.style-item {
+  cursor: move;
+  padding: 6px 0;
+  border-bottom: 1px dashed #ddd;
+  transition: transform 0.3s ease;
+}
+.style-item:last-child {
+  border-bottom: none;
+}
+.style-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+</style>
+
+<script>
+// چرخش تصویر با کلیک
+document.querySelectorAll('.rotatable').forEach(img => {
+  img.addEventListener('click', () => {
+    let gallery = JSON.parse(img.dataset.gallery);
+    let current = img.src;
+    let index = gallery.indexOf(current);
+    let next = gallery[(index + 1) % gallery.length];
+    img.src = next;
+  });
+});
+
+// Drag & Drop عمودی
+let draggedItem = null;
+document.querySelectorAll('.style-item').forEach(item => {
+  item.addEventListener('dragstart', () => {
+    draggedItem = item;
+    item.classList.add('dragging');
+  });
+  item.addEventListener('dragend', () => {
+    item.classList.remove('dragging');
+    draggedItem = null;
+  });
+});
+
+document.getElementById('style-board').addEventListener('dragover', e => {
+  e.preventDefault();
+  const afterElement = getDragAfterElement(e.clientY);
+  const board = document.getElementById('style-board');
+  if (afterElement == null) {
+    board.appendChild(draggedItem);
+  } else {
+    board.insertBefore(draggedItem, afterElement);
+  }
+});
+
+function getDragAfterElement(y) {
+  const items = [...document.querySelectorAll('.style-item:not(.dragging)')];
+  return items.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) {
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+</script>
+{% endblock %}

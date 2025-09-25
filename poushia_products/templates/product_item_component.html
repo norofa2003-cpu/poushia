@@ -1,0 +1,35 @@
+<div class="product-layout product-grid col-lg-3 col-md-4 col-sm-6 col-xs-12">
+  <div class="product-thumb text-center p-3 shadow-sm border rounded" style="height: 100%;">
+    <div class="image mb-2">
+      <a href="{{ product.get_product_detail_url }}">
+        <img src="{{ product.image.url }}"
+             alt="{{ product.title }}"
+             title="{{ product.title }}"
+             class="img-responsive"
+             style="height: 180px; object-fit: cover; border-radius: 8px;">
+      </a>
+    </div>
+
+    <div class="caption">
+      <h4><a href="{{ product.get_product_detail_url }}">{{ product.title }}</a></h4>
+      <p class="descripttion text-muted">{{ product.descrription }}</p>
+      <p class="price"><span class="price">{{ product.price }}</span></p>
+    </div>
+
+    <div class="mt-2 d-flex justify-content-center align-items-center gap-2 flex-wrap">
+      <a href="{{ product.get_product_detail_url }}" class="btn btn-light btn-sm" title="مشاهده محصول">👁️</a>
+
+      {% if request.user.is_authenticated %}
+        <form method="post" action="{% url 'wishlist:add' product.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-danger btn-sm" title="علاقه‌مندی">❤️</button>
+        </form>
+
+        <form method="post" action="{% url 'styleboard:add' product.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-warning btn-sm" title="استایل‌ساز">✨</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>

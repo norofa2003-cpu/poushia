@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+{% load render_partial %}
+
+{% block contents %}
+<div class="container">
+  <div class="row">
+    <aside id="column-right" class="col-sm-3 hidden-xs">
+      {% render_partial 'poushia_profile.views.profile_sidebar' %}
+    </aside>
+    <div id="content" class="col-sm-9">
+      <h1 class="title">سفارش‌های من</h1>
+      <hr>
+      {% if orders %}
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>شماره</th>
+            <th>تاریخ پرداخت</th>
+            <th>وضعیت</th>
+            <th>مبلغ کل</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>{{ order.id }}</td>
+            <td>{% if order.pay_date %}{{ order.pay_date|date:"Y/m/d H:i" }}{% else %}-{% endif %}</td>
+            <td>{% if order.paid %}پرداخت شده{% else %}در انتظار پرداخت{% endif %}</td>
+            <td>{{ order.total_price }} تومان</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="text-muted">شما هنوز سفارشی ثبت نکرده‌اید.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

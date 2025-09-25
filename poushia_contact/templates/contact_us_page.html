@@ -1,0 +1,108 @@
+{% extends 'base/base.html' %}
+
+{% block contents %}
+
+<div id="container">
+    <div class="container">
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li><a href="index.html"><i class="fa fa-home"></i></a></li>
+            <li><a href="contact-us.html">تماس با ما</a></li>
+        </ul>
+        <!-- Breadcrumb End-->
+        <div class="row">
+            <!--Middle Part Start-->
+            <div id="content" class="col-sm-9">
+                <h1 class="title">تماس با ما</h1>
+                <h3 class="subtitle">آدرس ما</h3>
+
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>موقعیت</strong><br>
+                        <address>
+                            {{settings.address}}
+                        </address>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <strong>شماره تلفن</strong><br>
+                        {{settings.mobile}}<br><br>
+                        <strong>فکس</strong><br>
+                        {{settings.fax}}
+                    </div>
+
+                    <div class="col-sm-3">
+                        <strong>ساعات کار</strong><br>
+                        خدمات مشتریان 24<br><br>
+                        <strong>پیام فروشگاه</strong><br>
+                        از همراهی شما مچکریم و با دریافت نظراتتون سعی داریم بهتر باشیم.
+                    </div>
+                </div>
+
+                <form class="form-horizontal" method="post">
+                    {% csrf_token %}
+                    <fieldset>
+                        <h3 class="subtitle">با ما ارتباط برقرار کنید</h3>
+                        <div class="form-group required">
+                            <label class="col-md-2 col-sm-3 control-label" for="input-name">
+                                {{ contact_form.full_name.label }}
+                            </label>
+                            <div class="col-md-10 col-sm-9">
+                                {{ contact_form.full_name }}
+                            </div>
+                            {% for error in contact_form.full_name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group required">
+                            <label class="col-md-2 col-sm-3 control-label" for="input-email">
+                                {{ contact_form.email.label }}
+                            </label>
+                            <div class="col-md-10 col-sm-9">
+                                {{ contact_form.email }}
+                            </div>
+                            {% for error in contact_form.email.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-group required">
+                            <label class="col-md-2 col-sm-3 control-label" for="input-message">
+                                {{ contact_form.message.label }}
+                            </label>
+                            <div class="col-md-10 col-sm-9">
+                                {{ contact_form.message }}
+                            </div>
+                            {% for error in contact_form.message.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                    </fieldset>
+                    <div class="buttons">
+                        <div class="pull-right">
+                            <input class="btn btn-primary" type="submit" value="ارسال">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <aside id="column-right" class="col-sm-3 hidden-xs">
+                <div class="list-group">
+
+                </div>
+                <div class="banner owl-carousel owl-theme" style="opacity: 1; display: block;">
+                    <div class="owl-wrapper-outer">
+                        <div class="owl-wrapper"
+                             style="width: 1052px; left: 0px; display: block; transition: all; transform: translate3d(0px, 0px, 0px); transform-origin: 131.5px center 0px; perspective-origin: 131.5px center;">
+
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+            <!--Middle Part End -->
+        </div>
+    </div>
+</div>
+{% endblock %}
